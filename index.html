@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+     <script src='/static/jcanvas.min.js'></script>
+    <script>
+ $('document').ready(function(e) {
+     var socket = io();
+     socket.on('arduino-recieve', function(objeto) {
+         $('#messages').append($('<li>').text("Obtuve:  " + parseInt(objeto.compuertas).toString(2) +
+             "  Piso: " + objeto.piso +
+             "  Area:  " + objeto.area +
+             " Lugares: " + objeto.total));
+         console.log(objeto);
+         updateOpens(parseInt(objeto.compuertas).toString(2) || "1000000000000000");
+         places = parseInt(objeto.total);
+         updateShapes();
+     });
+
+     for (var i = 0; i <= places; i++) {
+         opens[i] = true;
+     };
+
+
+
+
+
+
+     updateShapes();
+ });
+ var opens = new Array(100);
+ function updateOpens(str){
+        str = str.toString();
+        console.log(str)
+        var cont = 0;
+        for (var i = str.length-1;  i >= 0; i--) {
+          console.log(" I es " + i + " y Str en i "+ str[i] );
+          if(parseInt(str[i]) === 1){
+            opens[cont] = true;
+            console.log(" MARQUE 1")
+          } else{
+            opens[cont] = false;
+            console.log("Marque 0")
+          }
+          cont++;
+        }
+        for (var i = str.length; i < 20; i++){
+          opens[i] = true;
+        }
+     }
+ function Shape(x, y, width, height, fill) {
+         this.x = x;
+         this.y = y;
+         this.width = width;
+         this.height = height;
+         this.fill = fill;
+     }
+
+     function valid(isOpen) {
+         if (isOpen == true) {
+              console.log("true");
+             return "green";
+         } else {
+              console.log("false");
+             return "red";
+         }
+     }
+
+     function drawShape(shape) {
+         $('canvas').drawRect({
+            strokeStyle: 'black',
+            strokeWidth: 4,
+             fillStyle: shape.fill,
+             x: shape.x,
+             y: shape.y,
+             width: shape.width,
+             height: shape.height,
+             fromCenter:false
+         });
+     }
+     function drawShapewb(shape) {
+         $('canvas').drawRect({
+
+             fillStyle: shape.fill,
+             x: shape.x,
+             y: shape.y,
+             width: shape.width,
+             height: shape.height,
+             fromCenter:false
+         });
+     }
+
+
+
+     function updateShapes(){
+      var shapes = new Array(places);
+      alert();
+        for(var y = 0; y < 4; y++){
+          for (var x = 0; x < places; x++) {
+            if(y%2 == 0){
+              shapes[x] = new Shape(10+(y*50),  50 * x + (x*10) + 10, 100, 50, valid(opens[x]));
+              drawShape(shapes[x]);
+            }
+          }
+          for(var x = places; x < 20;x++){
+            if(y%2 == 0){
+            //  var temp = new Shape(8,  50 * x + (x*10) + 8, 110, 60, "white");
+            //  drawShapewb(temp);
+            }
+          }
+        }
+     }
+
+      var places = 10;
+      </script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+
+    <canvas id="myCanvas" width="700" height="1000"></canvas>
+
+  </body>
+</html>
