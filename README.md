@@ -8,6 +8,8 @@ iLugar es un observador de lugares de estacionamiento en tiempo real via sockets
 
 Este proyecto fue creado por
 - Daniel Sada Caraveo (A01169735) Ingienería en Sistemas Computacionales. Tercer Semestre
+- Joel Lara Quintana Ingienería en Sistemas Computacionales. Tercer Semestre
+- Esteban Gil Ingienería en Sistemas Computacionales. Tercer Semestre
 - Equipo: IndexOutOfBounds
     # Narración del proyecto.
 
